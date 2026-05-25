@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pat Callaway — DevOps & Android Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #00e5a0;
+      --accent2: #0066ff;
+      --text: #e8e8e8;
+      --muted: #666;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* GRID BACKGROUND */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 3rem;
+      z-index: 1;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: var(--sans);
+      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .line-accent { color: var(--accent); }
+    h1 .line-dim { color: #333; }
+
+    .hero-desc {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-desc span { color: var(--text); }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 1.75rem;
+      border: 1px solid;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 3rem;
+      right: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-right: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* SECTIONS */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 120px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p span { color: var(--text); }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .stat {
+      background: var(--bg2);
+      padding: 1.75rem;
+    }
+
+    .stat-num {
+      font-family: var(--sans);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .skill-card {
+      background: var(--bg2);
+      padding: 2rem;
+      transition: background 0.2s;
+    }
+
+    .skill-card:hover { background: var(--bg3); }
+
+    .skill-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-card h3 {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .tag.accent {
+      border-color: rgba(0,229,160,0.3);
+      color: var(--accent);
+    }
+
+    /* PROJECTS */
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .project-item {
+      background: var(--bg2);
+      padding: 2rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-item:hover { background: var(--bg3); }
+    .project-item:hover .proj-arrow { color: var(--accent); transform: translate(3px, -3px); }
+
+    .proj-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .proj-title {
+      font-family: var(--sans);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .proj-desc {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .proj-arrow {
+      font-size: 1.5rem;
+      color: var(--border);
+      transition: all 0.2s;
+    }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-text p {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .contact-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.75rem;
+      background: var(--bg2);
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+
+    .contact-link:hover { background: var(--bg3); color: var(--accent); }
+
+    .contact-link span { color: var(--muted); font-size: 0.7rem; }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* ANIMATIONS */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.25s; }
+    .fade-in:nth-child(3) { animation-delay: 0.4s; }
+    .fade-in:nth-child(4) { animation-delay: 0.55s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 0 1.5rem; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .status-bar { display: none; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">PC://portfolio</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag fade-in">DevOps · Android · EMM</div>
+      <h1 class="fade-in">
+        <div>PAT</div>
+        <div class="line-accent">CALLAWAY</div>
+        <div class="line-dim">._</div>
+      </h1>
+      <p class="hero-desc fade-in">
+        DevOps Engineer · <span>Tyler Technologies</span><br/>
+        Managing <span>43,000+</span> Android devices across school district fleets.<br/>
+        Building tools at the intersection of <span>EMM, cloud, and code.</span>
+      </p>
+      <div class="hero-cta fade-in">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="https://github.com/Pat-Callaway" target="_blank" class="btn btn-ghost">GitHub →</a>
+      </div>
+    </div>
+    <div class="status-bar">
+      <div><span class="status-dot"></span>Available for collaboration</div>
+      <div>patcallaway.me</div>
+      <div>WGU · B.S. Software Engineering · In Progress</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">01 — About</div>
+    <div class="about-grid">
+      <div class="about-text">
+        <h2>Engineer.<br/>Builder.<br/>Operator.</h2>
+        <p style="margin-top:1.5rem">
+          I'm a <span>DevOps & Mobile Device Management engineer</span> at Tyler Technologies,
+          where I serve as the sole EMM administrator for a fleet of Samsung rugged tablets
+          deployed across school district transportation operations.
+        </p>
+        <p>
+          Day to day that means designing <span>Android Enterprise policies</span>, managing
+          SOTI MobiControl at scale, and building custom integrations that bridge
+          device management with cloud infrastructure.
+        </p>
+        <p>
+          Outside of work I'm studying <span>Software Engineering at WGU</span>, learning Java
+          and Android development, and building personal tooling to sharpen my skills
+          as an Android/EMM subject matter expert.
+        </p>
+      </div>
+      <div>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="stat-num">43K+</div>
+            <div class="stat-label">Devices Managed</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">1</div>
+            <div class="stat-label">EMM Admin (me)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">AE</div>
+            <div class="stat-label">Android Enterprise</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">WGU</div>
+            <div class="stat-label">B.S. Soft. Eng.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">02 — Skills</div>
+    <h2>What I Work With</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">📱</div>
+        <h3>Mobile Device Management</h3>
+        <div class="skill-tags">
+          <span class="tag accent">SOTI MobiControl</span>
+          <span class="tag accent">Android Enterprise</span>
+          <span class="tag">Samsung Knox</span>
+          <span class="tag">Rugged Devices</span>
+          <span class="tag">EMM Policy</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">☁️</div>
+        <h3>Cloud & Infrastructure</h3>
+        <div class="skill-tags">
+          <span class="tag accent">AWS</span>
+          <span class="tag">EC2 / Lambda</span>
+          <span class="tag">API Gateway</span>
+          <span class="tag">DevOps Pipelines</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">⚙️</div>
+        <h3>Development</h3>
+        <div class="skill-tags">
+          <span class="tag accent">Python</span>
+          <span class="tag accent">Java</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🔧</div>
+        <h3>Tooling & Integrations</h3>
+        <div class="skill-tags">
+          <span class="tag accent">MCP (Model Context Protocol)</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Monday.com</span>
+          <span class="tag">Teams</span>
+          <span class="tag">OAuth2</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">03 — Projects</div>
+    <h2>Things I've Built</h2>
+    <div class="projects-list">
+      <a href="https://github.com/Pat-Callaway" class="project-item">
+        <div>
+          <div class="proj-num">001</div>
+          <div class="proj-title">Android Device MCP Server</div>
+          <div class="proj-desc">A Model Context Protocol server wrapping ADB commands, enabling AI-assisted Android device management from the command line. Built in Python with FastMCP.</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </a>
+      <a href="https://github.com/Pat-Callaway" class="project-item">
+        <div>
+          <div class="proj-num">002</div>
+          <div class="proj-title">EMM Operations Dashboard</div>
+          <div class="proj-desc">React + Node.js dashboard for monitoring device fleet health, surfacing enrollment anomalies, and visualizing policy compliance across 43,000+ endpoints.</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </a>
+      <a href="https://github.com/Pat-Callaway" class="project-item">
+        <div>
+          <div class="proj-num">003</div>
+          <div class="proj-title">java-learning-log</div>
+          <div class="proj-desc">Public learning journal for my WGU Software Engineering coursework. Structured by concept with small working programs demonstrating OOP, generics, and collections.</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </a>
+      <a href="https://github.com/Pat-Callaway" class="project-item">
+        <div>
+          <div class="proj-num">004</div>
+          <div class="proj-title">DevOps Playbooks</div>
+          <div class="proj-desc">Markdown-based SOPs and runbooks for Android Enterprise fleet operations — upgrade procedures, rollback strategies, monitoring checklists, and SOTI configuration guides.</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">04 — Contact</div>
+    <div class="contact-grid">
+      <div class="contact-text">
+        <h2>Let's Connect</h2>
+        <p style="margin-top:1.5rem">
+          Open to collaboration on Android tooling, EMM integrations, and DevOps projects.
+          Also happy to connect with other engineers in the GovTech / EdTech space.
+        </p>
+        <a href="mailto:hello@patcallaway.me" class="btn btn-primary">Say Hello →</a>
+      </div>
+      <div class="contact-links">
+        <a href="https://github.com/Pat-Callaway" target="_blank" class="contact-link">
+          GitHub <span>Pat-Callaway →</span>
+        </a>
+        <a href="https://linkedin.com/in/" target="_blank" class="contact-link">
+          LinkedIn <span>Connect →</span>
+        </a>
+        <a href="https://pcallaway.dev" target="_blank" class="contact-link">
+          pcallaway.dev <span>Technical Blog →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2026 Pat Callaway</div>
+    <div>patcallaway.me</div>
+    <div>Built with GitHub Pages</div>
+  </footer>
+
+</body>
+</html>
